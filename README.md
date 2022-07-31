@@ -2,4 +2,4 @@
 
 ## Database Diagram
 
-![Database](src/assets/databaseDiagram.png)
+![Database](src/assets/database.png)
