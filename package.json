@@ -8,7 +8,8 @@
     "build": "tsc",
     "dev": "nodemon --config nodemon.json src/app.ts",
     "lint": "eslint . --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "repository": {
     "type": "git",
@@ -33,9 +34,9 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "nodemon": "^2.0.19",
-    "pg": "^8.7.3",
+    "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^10.9.1",
-    "typeorm": "^0.3.7"
+    "typeorm": "0.3.7"
   }
 }

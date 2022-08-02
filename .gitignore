@@ -29,3 +29,8 @@ pids
 coverage
 
 /.husky
+
+.idea/
+.vscode/
+tmp/
+temp/
