@@ -9,13 +9,14 @@ import {
   ManyToMany,
   ManyToOne,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { Message } from './Message';
 import { User } from './User';
 import { WorkSpace } from './WorkSpace';
 
 @Entity()
-export class Channel {
+export class Channel extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -26,10 +27,10 @@ export class Channel {
   messages: Message[];
 
   @ManyToMany(() => User, (user) => user.channels)
-  users: User;
+  users: User[];
 
   @ManyToOne(() => WorkSpace, (workspace) => workspace.channels)
-  @JoinColumn()
+  @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpace;
 
   @CreateDateColumn()

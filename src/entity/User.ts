@@ -1,6 +1,7 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
+  BaseEntity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -8,10 +9,12 @@ import {
   OneToMany,
   JoinTable,
   ManyToMany,
+  OneToOne,
 } from 'typeorm';
 import { Channel } from './Channel';
 import { DirectMessage } from './DirectMessage';
 import { Message } from './Message';
+import { WorkSpace } from './WorkSpace';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -29,7 +32,7 @@ export enum UserStatus {
 }
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -72,6 +75,13 @@ export class User {
   @ManyToMany(() => DirectMessage, (directMessage) => directMessage.users)
   @JoinTable()
   directMessages: DirectMessage[];
+
+  @ManyToMany(() => WorkSpace, (workSpace) => workSpace.users)
+  @JoinTable()
+  workSpaces: WorkSpace[];
+
+  @OneToOne(() => DirectMessage, (directMessage) => directMessage.owner)
+  directMessageList: DirectMessage;
 
   @CreateDateColumn()
   createdAt: Date;
