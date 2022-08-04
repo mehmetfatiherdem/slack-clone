@@ -8,23 +8,22 @@ import {
   DeleteDateColumn,
   ManyToOne,
   JoinColumn,
-  BaseEntity,
 } from 'typeorm';
 import { User } from './User';
 
 @Entity()
-export class Message extends BaseEntity {
+export class Message {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ length: 200 })
   text: string;
 
-  @ManyToOne(() => User, (user) => user.messages)
+  @ManyToOne(() => User, (user) => user.messages, { nullable: true })
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ManyToOne(() => Channel, (channel) => channel.messages)
+  @ManyToOne(() => Channel, (channel) => channel.messages, { nullable: true })
   @JoinColumn({ name: 'channelId' })
   channel: Channel;
 

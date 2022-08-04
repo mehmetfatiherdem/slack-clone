@@ -9,27 +9,28 @@ import {
   ManyToMany,
   ManyToOne,
   JoinColumn,
-  BaseEntity,
 } from 'typeorm';
 import { Message } from './Message';
 import { User } from './User';
 import { WorkSpace } from './WorkSpace';
 
 @Entity()
-export class Channel extends BaseEntity {
+export class Channel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @OneToMany(() => Message, (message) => message.channel)
+  @OneToMany(() => Message, (message) => message.channel, { nullable: true })
   messages: Message[];
 
-  @ManyToMany(() => User, (user) => user.channels)
+  @ManyToMany(() => User, (user) => user.channels, { nullable: true })
   users: User[];
 
-  @ManyToOne(() => WorkSpace, (workspace) => workspace.channels)
+  @ManyToOne(() => WorkSpace, (workspace) => workspace.channels, {
+    nullable: true,
+  })
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpace;
 

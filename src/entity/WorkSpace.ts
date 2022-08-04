@@ -7,27 +7,26 @@ import {
   DeleteDateColumn,
   OneToMany,
   ManyToMany,
-  BaseEntity,
   JoinTable,
 } from 'typeorm';
 import { Channel } from './Channel';
 import { User } from './User';
 
 @Entity()
-export class WorkSpace extends BaseEntity {
+export class WorkSpace {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @OneToMany(() => Channel, (channel) => channel.workSpace)
+  @OneToMany(() => Channel, (channel) => channel.workSpace, { nullable: true })
   channels: Channel[];
 
-  @ManyToMany(() => User, (user) => user.workSpaces)
+  @ManyToMany(() => User, (user) => user.workSpaces, { nullable: true })
   users: User[];
 
-  @ManyToMany(() => User, (user) => user.signedInWorkSpaces)
+  @ManyToMany(() => User, (user) => user.signedInWorkSpaces, { nullable: true })
   @JoinTable()
   signedInUsers: User;
 

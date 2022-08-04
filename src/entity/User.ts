@@ -1,7 +1,6 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  BaseEntity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -32,7 +31,7 @@ export enum UserStatus {
 }
 
 @Entity()
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -65,25 +64,33 @@ export class User extends BaseEntity {
   })
   status: string;
 
-  @OneToMany(() => Message, (message) => message.user)
+  @OneToMany(() => Message, (message) => message.user, { nullable: true })
   messages: Message[];
 
-  @ManyToMany(() => Channel, (channel) => channel.users)
+  @ManyToMany(() => Channel, (channel) => channel.users, { nullable: true })
   @JoinTable()
   channels: Channel[];
 
-  @ManyToMany(() => DirectMessage, (directMessage) => directMessage.users)
+  @ManyToMany(() => DirectMessage, (directMessage) => directMessage.users, {
+    nullable: true,
+  })
   @JoinTable()
   directMessages: DirectMessage[];
 
-  @ManyToMany(() => WorkSpace, (workSpace) => workSpace.users)
+  @ManyToMany(() => WorkSpace, (workSpace) => workSpace.users, {
+    nullable: true,
+  })
   @JoinTable()
   workSpaces: WorkSpace[];
 
-  @ManyToMany(() => WorkSpace, (workSpace) => workSpace.signedInUsers)
+  @ManyToMany(() => WorkSpace, (workSpace) => workSpace.signedInUsers, {
+    nullable: true,
+  })
   signedInWorkSpaces: WorkSpace[];
 
-  @OneToOne(() => DirectMessage, (directMessage) => directMessage.owner)
+  @OneToOne(() => DirectMessage, (directMessage) => directMessage.owner, {
+    nullable: true,
+  })
   directMessageList: DirectMessage;
 
   @CreateDateColumn()
