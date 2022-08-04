@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import 'reflect-metadata';
 import express from 'express';
+import routes from './routes/Index';
 import { AppDataSource } from './data-source';
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,6 +19,8 @@ AppDataSource.initialize()
 app.get('/', (req, res) => {
   res.send(`swagger coming soon..`);
 });
+
+app.use('/api', routes);
 
 app.listen(port, () => {
   console.log(`Express is listening at ${port}`);
