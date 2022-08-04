@@ -8,6 +8,7 @@ import {
   OneToMany,
   ManyToMany,
   BaseEntity,
+  JoinTable,
 } from 'typeorm';
 import { Channel } from './Channel';
 import { User } from './User';
@@ -25,6 +26,10 @@ export class WorkSpace extends BaseEntity {
 
   @ManyToMany(() => User, (user) => user.workSpaces)
   users: User[];
+
+  @ManyToMany(() => User, (user) => user.signedInWorkSpaces)
+  @JoinTable()
+  signedInUsers: User;
 
   @CreateDateColumn()
   createdAt: Date;

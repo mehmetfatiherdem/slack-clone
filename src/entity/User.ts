@@ -80,6 +80,9 @@ export class User extends BaseEntity {
   @JoinTable()
   workSpaces: WorkSpace[];
 
+  @ManyToMany(() => WorkSpace, (workSpace) => workSpace.signedInUsers)
+  signedInWorkSpaces: WorkSpace[];
+
   @OneToOne(() => DirectMessage, (directMessage) => directMessage.owner)
   directMessageList: DirectMessage;
 
