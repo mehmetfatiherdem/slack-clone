@@ -22,7 +22,10 @@ export class Channel {
   @Column()
   name: string;
 
-  @OneToMany(() => Message, (message) => message.channel, { nullable: true })
+  @OneToMany(() => Message, (message) => message.channel, {
+    nullable: true,
+    cascade: true,
+  })
   messages: Message[];
 
   @ManyToMany(() => User, (user) => user.channels, { nullable: true })

@@ -64,21 +64,29 @@ export class User {
   })
   status: string;
 
-  @OneToMany(() => Message, (message) => message.user, { nullable: true })
+  @OneToMany(() => Message, (message) => message.user, {
+    nullable: true,
+    cascade: true,
+  })
   messages: Message[];
 
-  @ManyToMany(() => Channel, (channel) => channel.users, { nullable: true })
+  @ManyToMany(() => Channel, (channel) => channel.users, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinTable()
   channels: Channel[];
 
   @ManyToMany(() => DirectMessage, (directMessage) => directMessage.users, {
     nullable: true,
+    cascade: true,
   })
   @JoinTable()
   directMessages: DirectMessage[];
 
   @ManyToMany(() => WorkSpace, (workSpace) => workSpace.users, {
     nullable: true,
+    cascade: true,
   })
   @JoinTable()
   workSpaces: WorkSpace[];
@@ -90,6 +98,7 @@ export class User {
 
   @OneToOne(() => DirectMessage, (directMessage) => directMessage.owner, {
     nullable: true,
+    cascade: true,
   })
   directMessageList: DirectMessage;
 

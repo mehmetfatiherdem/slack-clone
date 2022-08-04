@@ -20,13 +20,19 @@ export class WorkSpace {
   @Column()
   name: string;
 
-  @OneToMany(() => Channel, (channel) => channel.workSpace, { nullable: true })
+  @OneToMany(() => Channel, (channel) => channel.workSpace, {
+    nullable: true,
+    cascade: true,
+  })
   channels: Channel[];
 
   @ManyToMany(() => User, (user) => user.workSpaces, { nullable: true })
   users: User[];
 
-  @ManyToMany(() => User, (user) => user.signedInWorkSpaces, { nullable: true })
+  @ManyToMany(() => User, (user) => user.signedInWorkSpaces, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinTable()
   signedInUsers: User;
 
