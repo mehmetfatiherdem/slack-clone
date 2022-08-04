@@ -2,9 +2,13 @@ import 'dotenv/config';
 import 'reflect-metadata';
 import express from 'express';
 import routes from './routes/Index';
+import cookieParser from 'cookie-parser';
 import { AppDataSource } from './data-source';
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
 
 // to initialize initial connection with the database, register all entities
 // and "synchronize" database schema, call "initialize()" method of a newly created database
