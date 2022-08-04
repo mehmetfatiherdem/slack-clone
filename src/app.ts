@@ -11,6 +11,7 @@ const port = process.env.PORT || 3000;
 AppDataSource.initialize()
   .then(() => {
     // here you can start to work with your database
+    console.log(`appdata init`);
   })
   .catch((error) => console.log(error));
 

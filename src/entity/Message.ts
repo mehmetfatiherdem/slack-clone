@@ -17,7 +17,7 @@ export class Message extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'text', length: 200 })
+  @Column({ length: 200 })
   text: string;
 
   @ManyToOne(() => User, (user) => user.messages)
