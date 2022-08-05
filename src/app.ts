@@ -5,6 +5,7 @@ import routes from './routes/Index';
 import cookieParser from 'cookie-parser';
 import { AppDataSource } from './data-source';
 import path from 'path';
+import { isLoggedIn } from './middlewares/auth/isLoggedIn';
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -25,12 +26,12 @@ AppDataSource.initialize()
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.get('/app', (req, res) => {
-  res.send(`front end coming soon..`);
-});
-
 app.get('/', function (req, res) {
   res.render(`auth.ejs`);
+});
+
+app.get('/app', isLoggedIn, (req, res) => {
+  res.send(`front end coming soon..`);
 });
 
 app.use('/api', routes);

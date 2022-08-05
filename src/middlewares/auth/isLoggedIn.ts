@@ -7,13 +7,13 @@ export const isLoggedIn = (
   res: Response,
   next
 ) => {
-  const { appToken } = req.signedCookies;
+  const { app_token } = req.signedCookies;
 
-  if (!appToken) {
+  if (!app_token) {
     return res.status(401).json({ message: 'The user is not authenticated' });
   }
   try {
-    const user = jwt.verify(appToken, process.env.JWT_SECRET);
+    const user = jwt.verify(app_token, process.env.JWT_SECRET);
     if (user) req.user = user;
     return next();
   } catch (err) {
