@@ -27,7 +27,7 @@ passport.use(
         return cb(null, user);
       } else {
         const newUser = new User();
-        newUser.name = profile.displayName;
+        newUser.name = profile.name.givenName;
         newUser.lastName = profile.name.familyName;
         newUser.email = profile.emails[0].value;
         newUser.provider = 'google';

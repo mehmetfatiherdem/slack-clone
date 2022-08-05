@@ -14,7 +14,7 @@ router.get(
 
 router.get(
   '/google/callback',
-  passport.authenticate('google'),
+  passport.authenticate('google', { session: false }),
   function (req: IGetUserAuthInfoRequest, res) {
     // Successful authentication, redirect home.
     const { id } = req.user;
