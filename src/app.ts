@@ -25,15 +25,15 @@ AppDataSource.initialize()
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.get('/google-sign', function (req, res) {
+app.get('/app', (req, res) => {
+  res.send(`front end coming soon..`);
+});
+
+app.get('/', function (req, res) {
   res.render(`auth.ejs`);
 });
 
 app.use('/api', routes);
-
-app.get('/', (req, res) => {
-  res.send(`swagger coming soon..`);
-});
 
 app.listen(port, () => {
   console.log(`Express is listening at ${port}`);
