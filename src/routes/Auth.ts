@@ -5,7 +5,7 @@ import { IGetUserAuthInfoRequest } from '../helpers/type';
 const router = express.Router();
 
 router.get(
-  '/auth/google',
+  '/google',
   passport.authenticate('google', {
     session: false,
     scope: ['profile', 'openid', 'email'],
@@ -13,7 +13,7 @@ router.get(
 );
 
 router.get(
-  '/auth/google/callback',
+  '/google/callback',
   passport.authenticate('google'),
   function (req: IGetUserAuthInfoRequest, res) {
     // Successful authentication, redirect home.

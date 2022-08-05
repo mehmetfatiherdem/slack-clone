@@ -4,11 +4,13 @@ import express from 'express';
 import routes from './routes/Index';
 import cookieParser from 'cookie-parser';
 import { AppDataSource } from './data-source';
+import path from 'path';
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
+app.use(express.urlencoded({ extended: false }));
 
 // to initialize initial connection with the database, register all entities
 // and "synchronize" database schema, call "initialize()" method of a newly created database
@@ -20,11 +22,18 @@ AppDataSource.initialize()
   })
   .catch((error) => console.log(error));
 
-app.get('/', (req, res) => {
-  res.send(`swagger coming soon..`);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.get('/google-sign', function (req, res) {
+  res.render(`auth.ejs`);
 });
 
 app.use('/api', routes);
+
+app.get('/', (req, res) => {
+  res.send(`swagger coming soon..`);
+});
 
 app.listen(port, () => {
   console.log(`Express is listening at ${port}`);
