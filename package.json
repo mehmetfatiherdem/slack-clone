@@ -5,7 +5,8 @@
   "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
-    "build": "tsc",
+    "build": "tsc && ts-node tools/copyAssets",
+    "copy-assets": "ts-node tools/copyAssets",
     "dev": "nodemon --config nodemon.json src/app.ts",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -44,6 +45,7 @@
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",
+    "shelljs": "^0.8.5",
     "ts-node": "^10.9.1",
     "typeorm": "0.3.7"
   }
