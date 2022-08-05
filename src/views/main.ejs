@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            padding-top: 70px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Frontend Coming Soon...</h1>
+        <% if (user) { %>
+            <h2>User</h2>
+            <h3>
+                <%= user.name %>
+                    <%= user.lastName %>
+            </h3>
+            <% } %>
+                <button id="sign-out-app" onclick="signOut()">Sign Out From App</button>
+    </div>
+
+</body>
+<script>
+    function signOut() {
+        fetch('http://localhost:3000/api/users/signout-app', { method: 'GET' }).then(response => {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                    response.status);
+                return;
+            }
+            window.location.assign('/');
+            return;
+        }).catch(err => {
+            console.log('Fetch Error :-S', err);
+        });;
+
+    }
+
+</script>
+
+</html>

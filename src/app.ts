@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import { AppDataSource } from './data-source';
 import path from 'path';
 import { isLoggedIn } from './middlewares/auth/isLoggedIn';
+import { IGetUserAuthInfoRequest } from './helpers/type';
+import { User } from './entity/User';
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -30,8 +32,10 @@ app.get('/', function (req, res) {
   res.render(`auth.ejs`);
 });
 
-app.get('/app', isLoggedIn, (req, res) => {
-  res.send(`front end coming soon..`);
+app.get('/app', isLoggedIn, async (req: IGetUserAuthInfoRequest, res) => {
+  const userRepo = AppDataSource.getRepository(User);
+  const user = await userRepo.findOneBy({ id: req.user.id });
+  res.render('main.ejs', { user });
 });
 
 app.use('/api', routes);
