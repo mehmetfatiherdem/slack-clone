@@ -34,7 +34,7 @@ export class WorkSpace {
     cascade: true,
   })
   @JoinTable()
-  signedInUsers: User;
+  signedInUsers: User[];
 
   @CreateDateColumn()
   createdAt: Date;
@@ -44,4 +44,17 @@ export class WorkSpace {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  public get serializedBasicInfo() {
+    //TODO: check if they are preloaded
+    const { id, name, channels, users, signedInUsers } = this;
+
+    return {
+      id,
+      name,
+      channels,
+      users,
+      signedInUsers,
+    };
+  }
 }
