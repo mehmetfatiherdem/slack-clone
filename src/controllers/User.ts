@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 
-const signIn = (req: Request, res: Response) => {
+const signInApp = (req: Request, res: Response) => {
   // sign in by entering your mail address and get a 6-digit code
+  res.json({ message: 'sign in here' });
+};
+
+const signInWorkspace = (req: Request, res: Response) => {
+  // sign in to a workspace
   res.json({ message: 'sign in here' });
 };
 
@@ -15,4 +20,4 @@ const signOutWorkspace = (req: Request, res: Response) => {
   res.json({ message: 'Signed out from the workspace' });
 };
 
-export { signIn, signOutApp, signOutWorkspace };
+export { signInApp, signOutApp, signOutWorkspace, signInWorkspace };

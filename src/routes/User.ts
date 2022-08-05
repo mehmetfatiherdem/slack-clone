@@ -1,8 +1,14 @@
 import express from 'express';
-import { signIn, signOutApp, signOutWorkspace } from '../controllers/User';
+import {
+  signInApp,
+  signInWorkspace,
+  signOutApp,
+  signOutWorkspace,
+} from '../controllers/User';
 const router = express.Router();
 
-router.post('/signin', signIn);
+router.post('/signin-app', signInApp);
+router.post('/signin-workspace', signInWorkspace);
 router.get('/signout-app', signOutApp);
 router.get('/signout-workspace', signOutWorkspace);
 
