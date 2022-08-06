@@ -7,8 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
         body {
+            width: 100%;
+            height: 100%;
             padding-top: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         button {
@@ -16,6 +26,30 @@
         }
 
         .container {
+            width: 100%;
+            height: 100%;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .account {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .create-workspace {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signed-in-workspaces {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -25,17 +59,47 @@
 </head>
 
 <body>
+    <div class="header">
+        <h1>A Potato UI :_(</h1>
+    </div>
 
     <div class="container">
-        <h1>Frontend Coming Soon...</h1>
-        <% if (user) { %>
-            <h2>User</h2>
-            <h3>
-                <%= user.name %>
-                    <%= user.lastName %>
-            </h3>
-            <% } %>
-                <button id="sign-out-app" onclick="signOut()">Sign Out From App</button>
+        <div class="account">
+            <% if (user) { %>
+                <h2>User</h2>
+                <h3>
+                    <%= user.name %>
+                        <%= user.lastName %>
+                </h3>
+                <% } %>
+                    <button id="sign-out-app" onclick="signOut()">Sign Out From App</button>
+        </div>
+        <div class="create-workspace">
+            <form action="http://localhost:3000/api/workspaces/create" method="post">
+                <h3>Create Workspace</h3>
+                <label for="username">Name</label>
+                <input type="text" name="name" id="workspace-name">
+                <button type="submit">Create</button>
+            </form>
+        </div>
+        <div class="signed-in-workspaces">
+            <h2>Open Workspace</h2>
+            <% if (user.workSpaces?.length>0) { %>
+                <% user.workSpaces.forEach(workSpace=>{ %>
+                    <h3>
+                        <a href="#">
+                            <%= workSpace.name %>
+                        </a>
+                    </h3>
+                    <% }) %>
+                        <% } else { %>
+
+                            <h3>workspace</h3>
+                            <h3>workspace</h3>
+                            <h3>workspace</h3>
+
+                            <% } %>
+        </div>
     </div>
 
 </body>

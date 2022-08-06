@@ -8,6 +8,7 @@ import path from 'path';
 import { isLoggedIn } from './middlewares/auth/isLoggedIn';
 import { IGetUserAuthInfoRequest } from './helpers/type';
 import { User } from './entity/User';
+import { WorkSpace } from './entity/WorkSpace';
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -34,7 +35,11 @@ app.get('/', function (req, res) {
 
 app.get('/app', isLoggedIn, async (req: IGetUserAuthInfoRequest, res) => {
   const userRepo = AppDataSource.getRepository(User);
-  const user = await userRepo.findOneBy({ id: req.user.id });
+  const user = await userRepo.findOne({
+    where: { id: req.user.id },
+    relations: { workSpaces: true, signedInWorkSpaces: true },
+  });
+
   res.render('main.ejs', { user });
 });
 
