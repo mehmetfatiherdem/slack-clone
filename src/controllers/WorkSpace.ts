@@ -14,8 +14,6 @@ export const createWorkSpace = async (
 
   const workSpace = new WorkSpace();
   workSpace.name = name;
-  workSpace.signedInUsers = [];
-  workSpace.signedInUsers.push(req.user);
   workSpace.users = [];
   workSpace.users.push(req.user);
 
@@ -23,8 +21,6 @@ export const createWorkSpace = async (
 
   authUser.workSpaces = [];
   authUser.workSpaces.push(workSpace);
-  authUser.signedInWorkSpaces = [];
-  authUser.signedInWorkSpaces.push(workSpace);
 
   await workSpaceRepo.save(workSpace);
 

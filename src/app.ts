@@ -37,7 +37,7 @@ app.get('/app', isLoggedIn, async (req: IGetUserAuthInfoRequest, res) => {
   const userRepo = AppDataSource.getRepository(User);
   const user = await userRepo.findOne({
     where: { id: req.user.id },
-    relations: { workSpaces: true, signedInWorkSpaces: true },
+    relations: { workSpaces: true },
   });
 
   res.render('main.ejs', { user });
