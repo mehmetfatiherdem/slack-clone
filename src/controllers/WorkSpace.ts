@@ -34,6 +34,27 @@ export const getWorkSpaces = (req: IGetUserAuthInfoRequest, res: Response) => {
   res.send('workspaces retrieved');
 };
 
-export const getWorkSpace = (req: IGetUserAuthInfoRequest, res: Response) => {
-  res.send('workspaces retrieved');
+export const getWorkSpace = async (
+  req: IGetUserAuthInfoRequest,
+  res: Response
+) => {
+  const { workspaceId } = req.params;
+  const workSpaceRepo = AppDataSource.getRepository(WorkSpace);
+
+  const workSpace = await workSpaceRepo.findOne({
+    relations: {
+      users: true,
+    },
+    where: {
+      id: workspaceId,
+    },
+  });
+
+  if (!workSpace)
+    res.status(422).json({ message: 'workspace could not fetched' });
+
+  res.json({
+    message: `workspace ${workSpace.name} retrieved successfully`,
+    data: workSpace.serializedBasicInfo,
+  });
 };

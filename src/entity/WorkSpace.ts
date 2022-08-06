@@ -47,14 +47,13 @@ export class WorkSpace {
 
   public get serializedBasicInfo() {
     //TODO: check if they are preloaded
-    const { id, name, channels, users, signedInUsers } = this;
+    const { id, name, channels, users } = this;
 
     return {
       id,
       name,
       channels,
       users,
-      signedInUsers,
     };
   }
 }

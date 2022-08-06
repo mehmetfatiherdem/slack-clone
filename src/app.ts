@@ -8,9 +8,11 @@ import path from 'path';
 import { isLoggedIn } from './middlewares/auth/isLoggedIn';
 import { IGetUserAuthInfoRequest } from './helpers/type';
 import { User } from './entity/User';
-import { WorkSpace } from './entity/WorkSpace';
+import cors from 'cors';
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));

@@ -87,10 +87,12 @@
             <% if (user.workSpaces?.length>0) { %>
                 <% user.workSpaces.forEach(workSpace=>{ %>
                     <h3>
-                        <a href="#">
-                            <%= workSpace.name %>
-                        </a>
+
+                        <%= workSpace.name %>
+
                     </h3>
+
+                    <button onclick="getWorkSpace('<%= workSpace.id %>')">Launch</button>
                     <% }) %>
                         <% } else { %>
 
@@ -112,6 +114,26 @@
                 return;
             }
             window.location.assign('/');
+            return;
+        }).catch(err => {
+            console.log('Fetch Error :-S', err);
+        });;
+
+    }
+
+    function getWorkSpace(id) {
+        fetch(`http://localhost:3000/api/workspaces/${id}`, { method: 'GET' }).then(response => {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                    response.status);
+                return;
+            }
+            if (response.ok) {
+                response.json().then(json => {
+                    console.log(json);
+                });
+            }
+
             return;
         }).catch(err => {
             console.log('Fetch Error :-S', err);
