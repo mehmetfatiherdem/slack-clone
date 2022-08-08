@@ -91,7 +91,7 @@
                         <%= workSpace.name %>
 
                     </h3>
-
+                    <!-- FIXME: onclick doesn't work -->
                     <button onclick="getWorkSpace('<%= workSpace.id %>')">Launch</button>
                     <% }) %>
                         <% } else { %>
@@ -121,7 +121,10 @@
 
     }
 
-    function getWorkSpace(id) {
+    function getWorkSpace() {
+        console.log('clicked');
+
+
         fetch(`http://localhost:3000/api/workspaces/${id}`, { method: 'GET' }).then(response => {
             if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' +
