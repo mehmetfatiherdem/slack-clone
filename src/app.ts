@@ -10,6 +10,10 @@ import { IGetUserAuthInfoRequest } from './helpers/type';
 import { User } from './entity/User';
 import cors from 'cors';
 const app = express();
+import Ws from './services/WebSocketService';
+import http from 'http';
+const server = http.createServer(app);
+Ws.boot(server);
 const port = process.env.PORT || 3000;
 
 app.use(cors());
@@ -18,12 +22,8 @@ app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.urlencoded({ extended: false }));
 
-// to initialize initial connection with the database, register all entities
-// and "synchronize" database schema, call "initialize()" method of a newly created database
-// once in your application bootstrap
 AppDataSource.initialize()
   .then(() => {
-    // here you can start to work with your database
     console.log(`app data init`);
   })
   .catch((error) => console.log(error));
@@ -33,6 +33,10 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.get('/', function (req, res) {
   res.render(`auth.ejs`);
+});
+
+Ws.io.on('connection', (socket) => {
+  console.log('a user is connected');
 });
 
 app.get('/app', isLoggedIn, async (req: IGetUserAuthInfoRequest, res) => {
@@ -55,8 +59,6 @@ app.get(
 
 app.use('/api', routes);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Express is listening at ${port}`);
 });
-
-export default app;

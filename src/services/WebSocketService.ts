@@ -1,27 +1,18 @@
 import { Server } from 'socket.io';
+import http from 'http';
 
-interface ServerToClientEvents {
-  noArg: () => void;
-  basicEmit: (a: number, b: string, c: Buffer) => void;
-  withAck: (d: string, callback: (e: number) => void) => void;
+class Ws {
+  public io: Server;
+  private booted = false;
+
+  public boot(server: http.Server) {
+    console.log('boot');
+    if (this.booted) {
+      return;
+    }
+
+    this.booted = true;
+    this.io = new Server(server);
+  }
 }
-
-interface ClientToServerEvents {
-  hello: () => void;
-}
-
-interface InterServerEvents {
-  ping: () => void;
-}
-
-interface SocketData {
-  name: string;
-  age: number;
-}
-
-const io = new Server<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-  SocketData
->();
+export default new Ws();
