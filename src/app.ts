@@ -37,6 +37,9 @@ app.get('/', function (req, res) {
 
 Ws.io.on('connection', (socket) => {
   console.log('a user is connected');
+  socket.on('chat message', (msg) => {
+    Ws.io.emit('chat message', msg);
+  });
 });
 
 app.get('/app', isLoggedIn, async (req: IGetUserAuthInfoRequest, res) => {
