@@ -74,19 +74,31 @@
 
   </form>
 
-  <label for="channel"> Channel </label>
-  <input type="radio" name="channel" id="">
+  <% if(workSpace.channels?.length> 0){ %>
+    <% workSpace.channels.forEach(channel=>{ %>
+      <label for="channel">
+        <%= channel.name %>
+      </label>
+      <input type="radio" name="channel" id="">
+      <% }) %>
+        <% } else { %>
 
-  <label for="channel"> Channel </label>
-  <input type="radio" name="channel" id="">
 
-  <label for="channel"> Channel </label>
-  <input type="radio" name="channel" id="">
+          <label for="channel"> Channel </label>
+          <input type="radio" name="channel" id="">
 
-  <ul id="messages"></ul>
-  <form id="form" action="">
-    <input id="input" autocomplete="off" /><button>Send</button>
-  </form>
+          <label for="channel"> Channel </label>
+          <input type="radio" name="channel" id="">
+
+          <label for="channel"> Channel </label>
+          <input type="radio" name="channel" id="">
+
+          <% } %>
+
+            <ul id="messages"></ul>
+            <form id="form" action="">
+              <input id="input" autocomplete="off" /><button>Send</button>
+            </form>
 </body>
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 <script>
