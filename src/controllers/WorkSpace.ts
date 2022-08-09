@@ -53,8 +53,5 @@ export const getWorkSpace = async (
   if (!workSpace)
     res.status(422).json({ message: 'workspace could not fetched' });
 
-  res.json({
-    message: `workspace ${workSpace.name} retrieved successfully`,
-    data: workSpace.serializedBasicInfo,
-  });
+  res.render('workspace.ejs', { workSpace });
 };

@@ -62,6 +62,27 @@
 </head>
 
 <body>
+  <h1>
+    <%= workSpace.name %>
+  </h1>
+
+  <form action="http://localhost:3000/api/channels/create" method="post">
+
+    <label for="add-channel">Add Channel</label>
+    <input type="text" name="channelName" id="">
+    <button type="submit">Create</button>
+
+  </form>
+
+  <label for="channel"> Channel </label>
+  <input type="radio" name="channel" id="">
+
+  <label for="channel"> Channel </label>
+  <input type="radio" name="channel" id="">
+
+  <label for="channel"> Channel </label>
+  <input type="radio" name="channel" id="">
+
   <ul id="messages"></ul>
   <form id="form" action="">
     <input id="input" autocomplete="off" /><button>Send</button>

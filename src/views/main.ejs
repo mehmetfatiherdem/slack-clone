@@ -121,10 +121,8 @@
 
     }
 
-    function getWorkSpace() {
+    function getWorkSpace(id) {
         console.log('clicked');
-
-
         fetch(`http://localhost:3000/api/workspaces/${id}`, { method: 'GET' }).then(response => {
             if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' +
@@ -136,7 +134,7 @@
                     console.log(json);
                 });
             }
-
+            window.location.assign(`/api/workspaces/${id}`);
             return;
         }).catch(err => {
             console.log('Fetch Error :-S', err);

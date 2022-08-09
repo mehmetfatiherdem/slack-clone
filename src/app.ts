@@ -52,14 +52,6 @@ app.get('/app', isLoggedIn, async (req: IGetUserAuthInfoRequest, res) => {
   res.render('main.ejs', { user });
 });
 
-app.get(
-  '/app/workspace',
-  isLoggedIn,
-  async (req: IGetUserAuthInfoRequest, res) => {
-    res.render('workspace.ejs');
-  }
-);
-
 app.use('/api', routes);
 
 server.listen(port, () => {
