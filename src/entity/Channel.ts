@@ -45,4 +45,17 @@ export class Channel {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  public get serializedBasicInfo() {
+    //TODO: check if they are preloaded
+
+    const { id, name, users, messages } = this;
+
+    return {
+      id,
+      name,
+      users,
+      messages,
+    };
+  }
 }
