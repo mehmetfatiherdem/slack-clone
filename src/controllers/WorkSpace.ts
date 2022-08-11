@@ -45,6 +45,7 @@ export const getWorkSpace = async (
   const workSpace = await workSpaceRepo.findOne({
     relations: {
       users: true,
+      channels: true,
     },
     where: {
       id: workspaceId,
@@ -79,7 +80,12 @@ export const createChannel = async (
 
   const workspace = await workspaceRepo.findOne({ where: { id: workspaceId } });
 
+  workspace.channels = [];
+  workspace.channels.push(channel);
+
+  channel.workSpace = workspace;
+
   await channelRepo.save(channel);
 
-  return res.json(channel);
+  res.json(channel.name);
 };
