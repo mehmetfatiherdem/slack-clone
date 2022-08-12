@@ -153,7 +153,7 @@
 
           json.data.messages.forEach(message => {
             const item = document.createElement('li');
-            item.textContent = message.text;
+            item.textContent = `${message.text}   -   ${message.user.name} ${message.user.lastName}`;
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
           });

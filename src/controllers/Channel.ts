@@ -12,7 +12,7 @@ export const getChannel = async (
 
   const channel = await channelRepo.findOne({
     where: { id: channelId },
-    relations: { users: true, messages: true },
+    relations: ["users", "messages", "messages.user"],
   });
 
   if (!channel) res.status(422).json({ message: 'channel could not fetched' });
