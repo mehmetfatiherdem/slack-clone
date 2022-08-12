@@ -102,14 +102,22 @@
   var messages = document.getElementById('messages');
   var form = document.getElementById('form');
   var input = document.getElementById('input');
+  let channelId;
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (input.value) {
+      console.log(input.value);
       fetch(`http://localhost:3000/api/messages/create`, {
-        method: 'POST', body: {
-          text: input.value
-        }
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          text: input.value,
+          channelId: channelId
+        })
       }).then(response => {
         if (response.status !== 200) {
           console.log('Looks like there was a problem. Status Code: ' +
@@ -150,6 +158,7 @@
             window.scrollTo(0, document.body.scrollHeight);
           });
 
+          channelId = json.data.id;
 
         });
       }
