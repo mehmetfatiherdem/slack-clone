@@ -106,8 +106,22 @@
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (input.value) {
-      socket.emit('chat message', input.value);
-      input.value = '';
+      fetch(`http://localhost:3000/api/messages/create`, {
+        method: 'POST', body: {
+          text: input.value
+        }
+      }).then(response => {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+          return;
+        } else if (response.ok) {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      });
+
+
     }
   });
 
@@ -128,6 +142,15 @@
       if (response.ok) {
         response.json().then(json => {
           console.log(json);
+
+          json.data.messages.forEach(message => {
+            const item = document.createElement('li');
+            item.textContent = message.text;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+          });
+
+
         });
       }
 
