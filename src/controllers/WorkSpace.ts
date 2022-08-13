@@ -55,7 +55,14 @@ export const getWorkSpace = async (
   if (!workSpace)
     res.status(422).json({ message: 'workspace could not fetched' });
 
-  res.render('workspace.ejs', { workSpace });
+  const { randomBytes } = await import('crypto');
+
+  const key = randomBytes(48).toString('base64');
+
+  res.render('workspace.ejs', {
+    workSpace,
+    inviteLink: `http://localhost:3000/api/join-workspace/${key}`,
+  });
 };
 
 export const createChannel = async (
@@ -88,4 +95,11 @@ export const createChannel = async (
   await channelRepo.save(channel);
 
   res.json(channel.name);
+};
+
+export const joinWorkspace = async (
+  req: IGetUserAuthInfoRequest,
+  res: Response
+) => {
+  res.send('joined');
 };

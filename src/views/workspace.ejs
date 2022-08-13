@@ -66,6 +66,9 @@
     <%= workSpace.name %>
   </h1>
 
+  <p>Invite Link: <%= inviteLink %>
+  </p>
+
   <form action="http://localhost:3000/api/workspaces/<%=workSpace.id%>/create-channel" method="post">
 
     <label for="add-channel">Add Channel</label>
