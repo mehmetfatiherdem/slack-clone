@@ -9,7 +9,7 @@ export const createWorkSpace = async (
   req: IGetUserAuthInfoRequest,
   res: Response
 ) => {
-  /*
+  
   const { name } = req.body;
   const workSpaceRepo = AppDataSource.getRepository(WorkSpace);
   const userRepo = AppDataSource.getRepository(User);
@@ -35,7 +35,7 @@ export const createWorkSpace = async (
     message: 'Workspace created',
     data: workSpace.serializedBasicInfo,
   });
-  */
+  
 };
 
 export const getWorkSpaces = (req: IGetUserAuthInfoRequest, res: Response) => {
