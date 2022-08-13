@@ -20,6 +20,9 @@ export class WorkSpace {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  inviteCode: string;
+
   @OneToMany(() => Channel, (channel) => channel.workSpace, {
     nullable: true,
     cascade: true,

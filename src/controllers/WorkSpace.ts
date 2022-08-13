@@ -9,12 +9,18 @@ export const createWorkSpace = async (
   req: IGetUserAuthInfoRequest,
   res: Response
 ) => {
+  /*
   const { name } = req.body;
   const workSpaceRepo = AppDataSource.getRepository(WorkSpace);
   const userRepo = AppDataSource.getRepository(User);
 
+  const { randomBytes } = await import('crypto');
+
+  const key = randomBytes(48).toString('hex');
+
   const workSpace = new WorkSpace();
   workSpace.name = name;
+  workSpace.inviteCode = key;
   workSpace.users = [];
   workSpace.users.push(req.user);
 
@@ -29,6 +35,7 @@ export const createWorkSpace = async (
     message: 'Workspace created',
     data: workSpace.serializedBasicInfo,
   });
+  */
 };
 
 export const getWorkSpaces = (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -57,11 +64,13 @@ export const getWorkSpace = async (
 
   const { randomBytes } = await import('crypto');
 
-  const key = randomBytes(48).toString('base64');
+  const key = randomBytes(48).toString('hex');
+
+  console.log(key);
 
   res.render('workspace.ejs', {
     workSpace,
-    inviteLink: `http://localhost:3000/api/join-workspace/${key}`,
+    inviteLink: `http://localhost:3000/api/workspaces/${workSpace.id}/join/${workSpace.inviteCode}`,
   });
 };
 
@@ -101,5 +110,35 @@ export const joinWorkspace = async (
   req: IGetUserAuthInfoRequest,
   res: Response
 ) => {
-  res.send('joined');
+  const { workspaceId, code } = req.params;
+
+  const workspaceRepo = AppDataSource.getRepository(WorkSpace);
+  const userRepo = AppDataSource.getRepository(User);
+
+  const workspace = await workspaceRepo.findOne({
+    where: { id: workspaceId },
+    relations: { users: true },
+  });
+
+  if (workspace.inviteCode != code) {
+    return res.status(422).json({ message: 'invite link is wrong' });
+  }
+  if (workspace.users?.length > 0) console.log('user exist');
+  workspace.users.push(req.user);
+
+  const authUser = await userRepo.findOne({
+    where: { id: req.user.id },
+    relations: { workSpaces: true },
+  });
+
+  if (authUser.workSpaces?.length > 0) {
+    authUser.workSpaces.push(workspace);
+  } else {
+    authUser.workSpaces = [];
+    authUser.workSpaces.push(workspace);
+  }
+
+  await workspaceRepo.save(workspace);
+
+  return res.send('joined');
 };

@@ -66,38 +66,49 @@
     <%= workSpace.name %>
   </h1>
 
-  <p>Invite Link: <%= inviteLink %>
-  </p>
+  <% if(workSpace.users?.length> 0){ %>
+    <% workSpace.users.forEach(user=>{ %>
 
-  <form action="http://localhost:3000/api/workspaces/<%=workSpace.id%>/create-channel" method="post">
-
-    <label for="add-channel">Add Channel</label>
-    <input type="text" name="channelName" id="">
-    <button type="submit">Create</button>
-
-  </form>
-
-  <% if(workSpace.channels?.length> 0){ %>
-    <% workSpace.channels.forEach(channel=>{ %>
-
-      <button onclick="getChannel('<%= channel.id %>')">
-        <%= channel.name %>
-      </button>
+      <p>
+        <%= user.name %>
+      </p>
 
       <% }) %>
-        <% } else { %>
+
+        <% } %>
+
+          <p>Invite Link: <%= inviteLink %>
+          </p>
+
+          <form action="http://localhost:3000/api/workspaces/<%=workSpace.id%>/create-channel" method="post">
+
+            <label for="add-channel">Add Channel</label>
+            <input type="text" name="channelName" id="">
+            <button type="submit">Create</button>
+
+          </form>
+
+          <% if(workSpace.channels?.length> 0){ %>
+            <% workSpace.channels.forEach(channel=>{ %>
+
+              <button onclick="getChannel('<%= channel.id %>')">
+                <%= channel.name %>
+              </button>
+
+              <% }) %>
+                <% } else { %>
 
 
-          <button>Channel</button>
-          <button>Channel</button>
-          <button>Channel</button>
+                  <button>Channel</button>
+                  <button>Channel</button>
+                  <button>Channel</button>
 
-          <% } %>
+                  <% } %>
 
-            <ul id="messages"></ul>
-            <form id="form" action="">
-              <input id="input" autocomplete="off" /><button onclick="getSender()">Send</button>
-            </form>
+                    <ul id="messages"></ul>
+                    <form id="form" action="">
+                      <input id="input" autocomplete="off" /><button onclick="getSender()">Send</button>
+                    </form>
 </body>
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 <script>
