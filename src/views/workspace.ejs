@@ -93,7 +93,7 @@
 
             <ul id="messages"></ul>
             <form id="form" action="">
-              <input id="input" autocomplete="off" /><button>Send</button>
+              <input id="input" autocomplete="off" /><button onclick="getSender()">Send</button>
             </form>
 </body>
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
@@ -103,6 +103,7 @@
   var form = document.getElementById('form');
   var input = document.getElementById('input');
   let channelId;
+  let sender;
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -135,7 +136,7 @@
 
   socket.on('chat message', function (msg) {
     var item = document.createElement('li');
-    item.textContent = msg;
+    item.textContent = `${msg}   -   ${sender}`;
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
   });
@@ -167,6 +168,25 @@
     }).catch(err => {
       console.log('Fetch Error :-S', err);
     });;
+  }
+
+  function getSender() {
+    fetch(`http://localhost:3000/api/users/me`, {
+      method: 'GET'
+    }).then(response => {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+      if (response.ok) {
+        response.json().then(json => {
+          console.log(json);
+          sender = `${json.name} ${json.lastName}`;
+        });
+      }
+      return;
+    });
   }
 
 </script>

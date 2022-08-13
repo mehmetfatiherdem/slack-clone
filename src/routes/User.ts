@@ -1,15 +1,8 @@
 import express from 'express';
-import {
-  signInApp,
-  signInWorkspace,
-  signOutApp,
-  signOutWorkspace,
-} from '../controllers/User';
+import { getUser } from '../controllers/User';
+import { isLoggedIn } from '../middlewares/auth/isLoggedIn';
 const router = express.Router();
 
-router.post('/signin-app', signInApp);
-router.post('/signin-workspace', signInWorkspace);
-router.get('/signout-app', signOutApp);
-router.get('/signout-workspace', signOutWorkspace);
+router.get('/me', isLoggedIn, getUser);
 
 export default router;
