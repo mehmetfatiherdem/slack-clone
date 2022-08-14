@@ -70,6 +70,12 @@ export class User {
   })
   messages: Message[];
 
+  @OneToMany(() => Message, (message) => message.user, {
+    nullable: true,
+    cascade: true,
+  })
+  privateMessages: Message[];
+
   @ManyToMany(() => Channel, (channel) => channel.users, {
     nullable: true,
     cascade: true,

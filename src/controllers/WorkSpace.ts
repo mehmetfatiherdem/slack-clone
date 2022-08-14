@@ -58,10 +58,7 @@ export const getWorkSpace = async (
   const workSpaceRepo = AppDataSource.getRepository(WorkSpace);
 
   const workSpace = await workSpaceRepo.findOne({
-    relations: {
-      users: true,
-      channels: true,
-    },
+    relations: ['users', 'channels', 'users.privateMessages'],
     where: {
       id: workspaceId,
     },
