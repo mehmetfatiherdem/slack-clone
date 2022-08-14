@@ -69,9 +69,9 @@
   <% if(workSpace.users?.length> 0){ %>
     <% workSpace.users.forEach(user=>{ %>
 
-      <button>
+      <button onclick="getDirectMessage('<%= user.id %>')">
         <%= user.name %>
-      </button onclick="getDirectMessage('<%= user.id %>')">
+      </button>
 
       <% }) %>
 
@@ -196,7 +196,7 @@
         response.json().then(json => {
           console.log(json);
 
-          json.data.privateMessages.forEach(message => {
+          json.data.directMessages?.forEach(message => {
             const item = document.createElement('li');
             item.textContent = `${message.text}   -   ${message.user.name} ${message.user.lastName}`;
             messages.appendChild(item);
