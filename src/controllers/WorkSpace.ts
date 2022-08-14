@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AppDataSource } from '../data-source';
 import { Channel } from '../entity/Channel';
+import { DirectMessage } from '../entity/DirectMessage';
 import { User } from '../entity/User';
 import { WorkSpace } from '../entity/WorkSpace';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
@@ -9,10 +10,10 @@ export const createWorkSpace = async (
   req: IGetUserAuthInfoRequest,
   res: Response
 ) => {
-  
   const { name } = req.body;
   const workSpaceRepo = AppDataSource.getRepository(WorkSpace);
   const userRepo = AppDataSource.getRepository(User);
+  const directMessageRepo = AppDataSource.getRepository(DirectMessage);
 
   const { randomBytes } = await import('crypto');
 
@@ -29,13 +30,20 @@ export const createWorkSpace = async (
   authUser.workSpaces = [];
   authUser.workSpaces.push(workSpace);
 
+  const directMessage = new DirectMessage();
+
+  directMessage.owner = authUser;
+
+  await directMessageRepo.save(directMessage);
+
+  authUser.directMessageList = directMessage;
+
   await workSpaceRepo.save(workSpace);
 
   res.json({
     message: 'Workspace created',
     data: workSpace.serializedBasicInfo,
   });
-  
 };
 
 export const getWorkSpaces = (req: IGetUserAuthInfoRequest, res: Response) => {
