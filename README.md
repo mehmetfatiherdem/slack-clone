@@ -52,5 +52,6 @@ This is a Slack like application that is built using server-side rendering. I wa
 - [TypeScript](https://www.typescriptlang.org/)
 - [Express.js](https://expressjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [TypeORM](https://typeorm.io/)
 - [ESLint](https://eslint.org/)
 - [Socket.IO](https://socket.io/)
