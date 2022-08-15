@@ -30,10 +30,10 @@ export class PrivateMessage {
   @JoinColumn({ name: 'receiverId' })
   receiver: User;
 
-  @ManyToMany(() => DirectMessage, (directMessage) => directMessage.message, {
+  @ManyToMany(() => DirectMessage, (directMessage) => directMessage.messages, {
     nullable: true,
   })
-  directMessage: DirectMessage;
+  directMessages: DirectMessage[];
 
   @CreateDateColumn()
   createdAt: Date;

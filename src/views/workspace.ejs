@@ -118,12 +118,42 @@
   var input = document.getElementById('input');
   let channelId;
   let sender;
+  let isChannelMessage = true;
+  let receiverId;
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (input.value) {
       console.log(input.value);
-      fetch(`http://localhost:3000/api/messages/create`, {
+
+      if (isChannelMessage) {
+
+        fetch(`http://localhost:3000/api/messages/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            text: input.value,
+            channelId: channelId
+          })
+        }).then(response => {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+              response.status);
+            return;
+          } else if (response.ok) {
+            socket.emit('chat message', input.value);
+            input.value = '';
+          }
+        });
+
+
+      }
+    } else if (!isChannelMessage) {
+      console.log('this is private message');
+      fetch(`http://localhost:3000/api/direct-messages/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +161,7 @@
         },
         body: JSON.stringify({
           text: input.value,
-          channelId: channelId
+          receiverId: receiverId
         })
       }).then(response => {
         if (response.status !== 200) {
@@ -143,8 +173,6 @@
           input.value = '';
         }
       });
-
-
     }
   });
 
@@ -164,7 +192,9 @@
       }
       if (response.ok) {
         response.json().then(json => {
-          console.log(json);
+          isChannelMessage = true;
+
+          console.log(isChannelMessage);
 
           json.data.messages.forEach(message => {
             const item = document.createElement('li');
@@ -195,6 +225,18 @@
       if (response.ok) {
         response.json().then(json => {
           console.log(json);
+
+          receiverId = id;
+
+          isChannelMessage = false;
+          console.log(isChannelMessage);
+
+          json.data?.forEach(message => {
+            const item = document.createElement('li');
+            item.textContent = `${message.text}   -   ${message.user.name} ${message.user.lastName}`;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+          });
 
         });
       }

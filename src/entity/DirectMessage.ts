@@ -26,14 +26,14 @@ export class DirectMessage {
 
   @ManyToMany(
     () => PrivateMessage,
-    (privateMessage) => privateMessage.directMessage,
+    (privateMessage) => privateMessage.directMessages,
     {
       nullable: true,
       cascade: true,
     }
   )
   @JoinTable()
-  message: PrivateMessage;
+  messages: PrivateMessage[];
 
   @CreateDateColumn()
   createdAt: Date;
