@@ -1,7 +1,8 @@
-import express from 'express';
+import express, { Response } from 'express';
 import passport from '../auth/Passport';
 import jwt from 'jsonwebtoken';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
+import { isLoggedIn } from '../middlewares/auth/isLoggedIn';
 const router = express.Router();
 
 router.get(
@@ -33,12 +34,21 @@ router.get(
     );
 
     res.cookie('app_token', appToken, {
-      maxAge: cookieAge,
+      maxAge: cookieAge * 1000,
       httpOnly: true,
       signed: true,
     });
 
     res.redirect('/app');
+  }
+);
+
+router.get(
+  '/signout-app',
+  isLoggedIn,
+  function (req: IGetUserAuthInfoRequest, res: Response) {
+    res.clearCookie('app_token');
+    res.json({ message: 'signed out' });
   }
 );
 
