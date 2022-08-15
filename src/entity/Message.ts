@@ -23,10 +23,6 @@ export class Message {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ManyToOne(() => User, (user) => user.messages, { nullable: true })
-  @JoinColumn({ name: 'receiverId' })
-  receiver: User;
-
   @ManyToOne(() => Channel, (channel) => channel.messages, { nullable: true })
   @JoinColumn({ name: 'channelId' })
   channel: Channel;

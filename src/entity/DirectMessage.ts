@@ -7,7 +7,9 @@ import {
   Entity,
   OneToOne,
   JoinColumn,
+  JoinTable,
 } from 'typeorm';
+import { PrivateMessage } from './PrivateMessage';
 import { User } from './User';
 
 @Entity()
@@ -21,6 +23,17 @@ export class DirectMessage {
   @OneToOne(() => User, (user) => user.directMessageList, { nullable: true })
   @JoinColumn({ name: 'ownerId' })
   owner: User;
+
+  @ManyToMany(
+    () => PrivateMessage,
+    (privateMessage) => privateMessage.directMessage,
+    {
+      nullable: true,
+      cascade: true,
+    }
+  )
+  @JoinTable()
+  message: PrivateMessage;
 
   @CreateDateColumn()
   createdAt: Date;

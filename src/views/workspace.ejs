@@ -196,13 +196,6 @@
         response.json().then(json => {
           console.log(json);
 
-          json.data.directMessages?.forEach(message => {
-            const item = document.createElement('li');
-            item.textContent = `${message.text}   -   ${message.user.name} ${message.user.lastName}`;
-            messages.appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
-          });
-
         });
       }
 

@@ -16,26 +16,12 @@ export const getDirectMessage = async (
   const sender = await userRepo.findOne({
     where: { id: req.user.id },
     relations: {
-      privateMessages: true,
       directMessages: true,
       directMessageList: true,
     },
   });
 
-  const receiver = await userRepo.findOne({ where: { id: userId } });
-
-  const sentMessages = await messageRepo.find({
-    where: { user: sender, receiver: receiver },
-  });
-
-  const receivedMessages = await messageRepo.find({
-    where: { user: receiver, receiver: sender },
-  });
-
-  const directMessages = [...sentMessages, ...receivedMessages];
-
   res.json({
     message: 'direct messages retrieved successfully',
-    data: directMessages,
   });
 };

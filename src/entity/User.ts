@@ -13,6 +13,7 @@ import {
 import { Channel } from './Channel';
 import { DirectMessage } from './DirectMessage';
 import { Message } from './Message';
+import { PrivateMessage } from './PrivateMessage';
 import { WorkSpace } from './WorkSpace';
 
 export enum UserRole {
@@ -70,12 +71,6 @@ export class User {
   })
   messages: Message[];
 
-  @OneToMany(() => Message, (message) => message.user, {
-    nullable: true,
-    cascade: true,
-  })
-  privateMessages: Message[];
-
   @ManyToMany(() => Channel, (channel) => channel.users, {
     nullable: true,
     cascade: true,
@@ -89,6 +84,18 @@ export class User {
   })
   @JoinTable()
   directMessages: DirectMessage[];
+
+  @OneToMany(() => PrivateMessage, (privateMessage) => privateMessage.sender, {
+    nullable: true,
+    cascade: true,
+  })
+  privateMessagesSent: Message[];
+
+  @OneToMany(() => PrivateMessage, (privateMessage) => privateMessage.receiver, {
+    nullable: true,
+    cascade: true,
+  })
+  privateMessagesReceived: Message[];
 
   @ManyToMany(() => WorkSpace, (workSpace) => workSpace.users, {
     nullable: true,
