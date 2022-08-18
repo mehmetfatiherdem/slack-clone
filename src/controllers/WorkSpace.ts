@@ -36,7 +36,7 @@ export const createWorkSpace = async (
 
   await directMessageRepo.save(directMessage);
 
-  authUser.directMessageList = directMessage;
+  authUser.directMessage = directMessage;
 
   await workSpaceRepo.save(workSpace);
 

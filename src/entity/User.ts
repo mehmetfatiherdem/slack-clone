@@ -78,24 +78,17 @@ export class User {
   @JoinTable()
   channels: Channel[];
 
-  @ManyToMany(() => DirectMessage, (directMessage) => directMessage.users, {
-    nullable: true,
-    cascade: true,
-  })
-  @JoinTable()
-  directMessages: DirectMessage[];
-
   @OneToMany(() => PrivateMessage, (privateMessage) => privateMessage.sender, {
     nullable: true,
     cascade: true,
   })
-  privateMessagesSent: Message[];
+  privateMessagesSent: PrivateMessage[];
 
   @OneToMany(() => PrivateMessage, (privateMessage) => privateMessage.receiver, {
     nullable: true,
     cascade: true,
   })
-  privateMessagesReceived: Message[];
+  privateMessagesReceived: PrivateMessage[];
 
   @ManyToMany(() => WorkSpace, (workSpace) => workSpace.users, {
     nullable: true,
@@ -113,7 +106,14 @@ export class User {
     nullable: true,
     cascade: true,
   })
-  directMessageList: DirectMessage;
+  directMessage: DirectMessage;
+
+  @ManyToMany(() => DirectMessage, (directMessage) => directMessage.users, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinTable()
+  directMessageBelongTo: DirectMessage[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -17,10 +17,10 @@ export class DirectMessage {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToMany(() => User, (user) => user.directMessages, { nullable: true })
+  @ManyToMany(() => User, (user) => user.directMessageBelongTo, { nullable: true })
   users: User[];
 
-  @OneToOne(() => User, (user) => user.directMessageList, { nullable: true })
+  @OneToOne(() => User, (user) => user.directMessage, { nullable: true })
   @JoinColumn({ name: 'ownerId' })
   owner: User;
 

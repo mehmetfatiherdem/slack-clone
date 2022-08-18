@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import { AppDataSource } from '../data-source';
 import { DirectMessage } from '../entity/DirectMessage';
-import { Message } from '../entity/Message';
 import { PrivateMessage } from '../entity/PrivateMessage';
 import { User } from '../entity/User';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
@@ -17,31 +16,22 @@ export const getDirectMessage = async (
 
   const sender = await userRepo.findOne({
     where: { id: req.user.id },
-    relations: {
-      privateMessagesReceived: true,
-      privateMessagesSent: true,
-      directMessages: true,
-      directMessageList: true,
-    },
   });
 
   const receiver = await userRepo.findOne({
     where: { id: userId },
-    relations: {
-      privateMessagesReceived: true,
-      privateMessagesSent: true,
-      directMessages: true,
-      directMessageList: true,
-    },
   });
 
+  // FIXME: where: {sender, receiver} doesn't work??
   const privateMessages = await privateMessageRepo.find({
-    where: { sender, receiver },
+    relations: ['sender', 'receiver'],
   });
 
   res.json({
     message: 'direct messages retrieved successfully',
-    data: privateMessages,
+    data: privateMessages.filter(
+      (msg) => msg.sender.id === sender.id && msg.receiver.id === userId
+    ),
   });
 };
 
@@ -51,56 +41,129 @@ export const sendPrivateMessage = async (
 ) => {
   const { text, receiverId } = req.body;
   const userRepo = AppDataSource.getRepository(User);
+  const directMessageRepo = AppDataSource.getRepository(DirectMessage);
+  const privateMessageRepo = AppDataSource.getRepository(PrivateMessage);
 
   const sender = await userRepo.findOne({
     where: { id: req.user.id },
-    relations: { directMessages: true, directMessageList: true },
+    relations: [
+      'directMessage',
+      'directMessage.users',
+      'directMessageBelongTo',
+    ],
   });
 
   const receiver = await userRepo.findOne({
     where: { id: receiverId },
-    relations: { directMessages: true, directMessageList: true },
+    relations: [
+      'directMessage',
+      'directMessage.users',
+      'directMessageBelongTo',
+    ],
   });
 
+  console.log(`receiver = ${receiver.directMessage.users[0]?.name}`);
+  console.log(`sender = ${sender.directMessage.users[0]?.name}`);
+
+  if (!sender.directMessage) {
+    const directMessage = new DirectMessage();
+    directMessage.owner = sender;
+    directMessage.users = [];
+    directMessage.users.push(receiver);
+    sender.directMessage = directMessage;
+    await directMessageRepo.save(directMessage);
+  } else {
+    sender.directMessage.users.push(receiver);
+    await directMessageRepo.save(sender.directMessage);
+  }
+
+  if (!receiver.directMessage) {
+    const directMessage = new DirectMessage();
+    directMessage.owner = receiver;
+    directMessage.users = [];
+    directMessage.users.push(sender);
+    receiver.directMessage = directMessage;
+    await directMessageRepo.save(directMessage);
+  } else {
+    receiver.directMessage.users.push(sender);
+    await directMessageRepo.save(receiver.directMessage);
+  }
+
+  const privateMessage = new PrivateMessage();
+  privateMessage.text = text;
+  privateMessage.receiver = receiver;
+  privateMessage.sender = sender;
+  privateMessage.directMessages = [];
+  privateMessage.directMessages.push(sender.directMessage);
+  privateMessage.directMessages.push(receiver.directMessage);
+
+  if (sender.privateMessagesSent?.length > 0) {
+    sender.privateMessagesSent.push(privateMessage);
+  } else {
+    sender.privateMessagesSent = [];
+    sender.privateMessagesSent.push(privateMessage);
+  }
+
+  if (receiver.privateMessagesReceived?.length > 0) {
+    receiver.privateMessagesReceived.push(privateMessage);
+  } else {
+    receiver.privateMessagesReceived = [];
+    receiver.privateMessagesReceived.push(privateMessage);
+  }
+
+  await privateMessageRepo.save(privateMessage);
+
+  /*
   await AppDataSource.transaction(async (transactionalEntityManager) => {
-    if (!sender.directMessageList) {
-      const directMessageList = new DirectMessage();
-      directMessageList.owner = sender;
-      directMessageList.users = [];
-      directMessageList.users.push(receiver);
-      sender.directMessageList = directMessageList;
-      await transactionalEntityManager.save(directMessageList);
+    if (!sender.directMessage) {
+      const directMessage = new DirectMessage();
+      directMessage.owner = sender;
+      directMessage.users = [];
+      directMessage.users.push(receiver);
+      sender.directMessage = directMessage;
+      await transactionalEntityManager.save(directMessage);
+    } else {
+      sender.directMessage.users.push(receiver);
+      await transactionalEntityManager.save(sender.directMessage);
     }
 
-    if (!receiver.directMessageList) {
-      const directMessageList = new DirectMessage();
-      directMessageList.owner = receiver;
-      directMessageList.users = [];
-      directMessageList.users.push(sender);
-      receiver.directMessageList = directMessageList;
-      await transactionalEntityManager.save(directMessageList);
+    if (!receiver.directMessage) {
+      const directMessage = new DirectMessage();
+      directMessage.owner = receiver;
+      directMessage.users = [];
+      directMessage.users.push(sender);
+      receiver.directMessage = directMessage;
+      await transactionalEntityManager.save(directMessage);
+    } else {
+      receiver.directMessage.users.push(sender);
+      await transactionalEntityManager.save(receiver.directMessage);
     }
 
     const privateMessage = new PrivateMessage();
     privateMessage.text = text;
     privateMessage.receiver = receiver;
     privateMessage.sender = sender;
+    privateMessage.directMessages = [];
+    privateMessage.directMessages.push(sender.directMessage);
+    privateMessage.directMessages.push(receiver.directMessage);
 
-    if (privateMessage.directMessages?.length > 0) {
-      privateMessage.directMessages.push(
-        sender.directMessageList,
-        receiver.directMessageList
-      );
+    if (sender.privateMessagesSent?.length > 0) {
+      sender.privateMessagesSent.push(privateMessage);
     } else {
-      privateMessage.directMessages = [];
-      privateMessage.directMessages.push(
-        sender.directMessageList,
-        receiver.directMessageList
-      );
+      sender.privateMessagesSent = [];
+      sender.privateMessagesSent.push(privateMessage);
+    }
+
+    if (receiver.privateMessagesReceived?.length > 0) {
+      receiver.privateMessagesReceived.push(privateMessage);
+    } else {
+      receiver.privateMessagesReceived = [];
+      receiver.privateMessagesReceived.push(privateMessage);
     }
 
     await transactionalEntityManager.save(privateMessage);
   });
+  */
 
-  return res.json({ message: 'private message sent' });
+  res.json({ message: 'private message sent' });
 };
