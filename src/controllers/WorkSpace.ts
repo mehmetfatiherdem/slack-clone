@@ -161,3 +161,11 @@ export const joinWorkspace = async (
 
   return res.send('joined');
 };
+
+export const signoutWorkspace = (
+  req: IGetUserAuthInfoRequest,
+  res: Response
+) => {
+  res.clearCookie('workspace_token');
+  res.redirect('/app');
+};
