@@ -36,6 +36,7 @@ export const isWorkspaceMember = async (
 
     if (isMember) return next();
   } catch (err) {
+    // TODO: check why this is not fired
     return res
       .clearCookie('workspace_token')
       .status(422)
