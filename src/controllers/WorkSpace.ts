@@ -5,6 +5,7 @@ import { DirectMessage } from '../entity/DirectMessage';
 import { User } from '../entity/User';
 import { WorkSpace } from '../entity/WorkSpace';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
+import jwt from 'jsonwebtoken';
 
 export const createWorkSpace = async (
   req: IGetUserAuthInfoRequest,
@@ -66,6 +67,25 @@ export const getWorkSpace = async (
 
   if (!workSpace)
     res.status(422).json({ message: 'workspace could not fetched' });
+
+  const cookieAge = 14 * 24 * 3600;
+
+  const workSpaceToken = jwt.sign(
+    {
+      id: req.user.id,
+      workspaceId: workSpace.id,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: cookieAge,
+    }
+  );
+
+  res.cookie('workspace_token', workSpaceToken, {
+    maxAge: cookieAge * 1000,
+    httpOnly: true,
+    signed: true,
+  });
 
   res.render('workspace.ejs', {
     workSpace,

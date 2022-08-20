@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { IGetUserAuthInfoRequest } from '../../helpers/type';
 
 export const isLoggedIn = (
   req: IGetUserAuthInfoRequest,
   res: Response,
-  next
+  next: NextFunction
 ) => {
   const { app_token } = req.signedCookies;
 
