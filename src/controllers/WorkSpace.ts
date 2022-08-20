@@ -67,12 +67,6 @@ export const getWorkSpace = async (
   if (!workSpace)
     res.status(422).json({ message: 'workspace could not fetched' });
 
-  const { randomBytes } = await import('crypto');
-
-  const key = randomBytes(48).toString('hex');
-
-  console.log(key);
-
   res.render('workspace.ejs', {
     workSpace,
     inviteLink: `http://localhost:3000/api/workspaces/${workSpace.id}/join/${workSpace.inviteCode}`,
