@@ -10,7 +10,12 @@ This is a Slack like application that is built using server-side rendering. I wa
 
 ## Database Diagram
 
-![Database](src/assets/database-diagram.png)
+![Database](src/assets/db-diagram.png)
+
+For a better view of the database diagram, you can go to the [Figma](https://www.figma.com/file/oqKJ4M0Z2UkkIcCWeLhyIr/Slack-Database?node-id=0%3A1) page.
+
+
+
 
 ## Getting Started
 
