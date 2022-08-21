@@ -36,6 +36,10 @@ export const sendPrivateMessage = async (
   res: Response
 ) => {
   const { text, receiverId } = req.body;
+
+  if (text == '')
+    res.status(422).json({ message: 'Cannot send empty message' });
+
   const userRepo = AppDataSource.getRepository(User);
   const directMessageRepo = AppDataSource.getRepository(DirectMessage);
   const privateMessageRepo = AppDataSource.getRepository(PrivateMessage);
