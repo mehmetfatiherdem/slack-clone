@@ -142,8 +142,7 @@ export const joinWorkspace = async (
   if (workspace.inviteCode != code) {
     return res.status(422).json({ message: 'invite link is wrong' });
   }
-  if (workspace.users?.length > 0) console.log('user exist');
-  workspace.users.push(req.user);
+  if (workspace.users?.length > 0) workspace.users.push(req.user);
 
   const authUser = await userRepo.findOne({
     where: { id: req.user.id },

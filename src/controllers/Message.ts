@@ -10,7 +10,7 @@ export const createMessage = async (
   res: Response
 ) => {
   const { text, channelId } = req.body;
-  console.log(`text ===> ${text}`);
+
   const messageRepo = AppDataSource.getRepository(Message);
   const userRepo = AppDataSource.getRepository(User);
   const channelRepo = AppDataSource.getRepository(Channel);

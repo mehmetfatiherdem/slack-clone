@@ -128,11 +128,7 @@
                     response.status);
                 return;
             }
-            if (response.ok) {
-                response.json().then(json => {
-                    console.log(json);
-                });
-            }
+            
             window.location.assign(`/api/workspaces/${id}`);
             return;
         }).catch(err => {

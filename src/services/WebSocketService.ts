@@ -6,7 +6,7 @@ class Ws {
   private booted = false;
 
   public boot(server: http.Server) {
-    console.log('boot');
+    
     if (this.booted) {
       return;
     }

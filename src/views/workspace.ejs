@@ -128,10 +128,8 @@
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (input.value) {
-      console.log(input.value);
 
       if (isChannelMessage) {
-        console.log('this is a channel message');
 
         fetch(`http://localhost:3000/api/messages/create`, {
           method: 'POST',
@@ -156,7 +154,7 @@
 
 
       } else if (!isChannelMessage) {
-        console.log('this is private message');
+
         fetch(`http://localhost:3000/api/direct-messages/send`, {
           method: 'POST',
           headers: {
@@ -199,9 +197,8 @@
         response.json().then(json => {
           isChannelMessage = true;
 
-          console.log(isChannelMessage);
 
-          messages.replaceChildren()
+          messages.replaceChildren();
 
           json.data.messages.forEach(message => {
             const item = document.createElement('li');
@@ -232,12 +229,10 @@
       }
       if (response.ok) {
         response.json().then(json => {
-          console.log(json);
 
           receiverId = id;
 
           isChannelMessage = false;
-          console.log(isChannelMessage);
 
           messages.replaceChildren();
 
@@ -268,7 +263,6 @@
       }
       if (response.ok) {
         response.json().then(json => {
-          console.log(json);
           sender = `${json.name} ${json.lastName}`;
         });
       }

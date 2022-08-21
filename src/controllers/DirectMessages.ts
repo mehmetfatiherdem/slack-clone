@@ -62,9 +62,6 @@ export const sendPrivateMessage = async (
     ],
   });
 
-  console.log(`receiver = ${receiver.directMessage.users[0]?.name}`);
-  console.log(`sender = ${sender.directMessage.users[0]?.name}`);
-
   if (!sender.directMessage) {
     const directMessage = new DirectMessage();
     directMessage.owner = sender;
