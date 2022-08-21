@@ -18,10 +18,6 @@ export const getDirectMessage = async (
     where: { id: req.user.id },
   });
 
-  const receiver = await userRepo.findOne({
-    where: { id: userId },
-  });
-
   // FIXME: where: {sender, receiver} doesn't work??
   const privateMessages = await privateMessageRepo.find({
     relations: ['sender', 'receiver'],
@@ -109,58 +105,6 @@ export const sendPrivateMessage = async (
   }
 
   await privateMessageRepo.save(privateMessage);
-
-  /*
-  await AppDataSource.transaction(async (transactionalEntityManager) => {
-    if (!sender.directMessage) {
-      const directMessage = new DirectMessage();
-      directMessage.owner = sender;
-      directMessage.users = [];
-      directMessage.users.push(receiver);
-      sender.directMessage = directMessage;
-      await transactionalEntityManager.save(directMessage);
-    } else {
-      sender.directMessage.users.push(receiver);
-      await transactionalEntityManager.save(sender.directMessage);
-    }
-
-    if (!receiver.directMessage) {
-      const directMessage = new DirectMessage();
-      directMessage.owner = receiver;
-      directMessage.users = [];
-      directMessage.users.push(sender);
-      receiver.directMessage = directMessage;
-      await transactionalEntityManager.save(directMessage);
-    } else {
-      receiver.directMessage.users.push(sender);
-      await transactionalEntityManager.save(receiver.directMessage);
-    }
-
-    const privateMessage = new PrivateMessage();
-    privateMessage.text = text;
-    privateMessage.receiver = receiver;
-    privateMessage.sender = sender;
-    privateMessage.directMessages = [];
-    privateMessage.directMessages.push(sender.directMessage);
-    privateMessage.directMessages.push(receiver.directMessage);
-
-    if (sender.privateMessagesSent?.length > 0) {
-      sender.privateMessagesSent.push(privateMessage);
-    } else {
-      sender.privateMessagesSent = [];
-      sender.privateMessagesSent.push(privateMessage);
-    }
-
-    if (receiver.privateMessagesReceived?.length > 0) {
-      receiver.privateMessagesReceived.push(privateMessage);
-    } else {
-      receiver.privateMessagesReceived = [];
-      receiver.privateMessagesReceived.push(privateMessage);
-    }
-
-    await transactionalEntityManager.save(privateMessage);
-  });
-  */
 
   res.json({ message: 'private message sent' });
 };

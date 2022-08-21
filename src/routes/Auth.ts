@@ -17,7 +17,7 @@ router.get(
   '/google/callback',
   passport.authenticate('google', { session: false }),
   function (req: IGetUserAuthInfoRequest, res) {
-    // Successful authentication, redirect home.
+
     const { id } = req.user;
 
     const cookieAge = 14 * 24 * 3600;
