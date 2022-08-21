@@ -105,9 +105,9 @@
 
                   <% } %>
 
-                  
 
-                  <button id="sign-out-workspace" onclick="signOutWorkspace()">Sign Out From Workspace</button>
+
+                    <button id="sign-out-workspace" onclick="signOutWorkspace()">Sign Out From Workspace</button>
 
                     <ul id="messages"></ul>
                     <form id="form" action="">
@@ -131,7 +131,7 @@
       console.log(input.value);
 
       if (isChannelMessage) {
-        console.log('this is a channel message')
+        console.log('this is a channel message');
 
         fetch(`http://localhost:3000/api/messages/create`, {
           method: 'POST',
@@ -155,30 +155,30 @@
         });
 
 
-      }else if (!isChannelMessage) {
-      console.log('this is private message');
-      fetch(`http://localhost:3000/api/direct-messages/send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          text: input.value,
-          receiverId: receiverId
-        })
-      }).then(response => {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          return;
-        } else if (response.ok) {
-          socket.emit('chat message', input.value);
-          input.value = '';
-        }
-      });
+      } else if (!isChannelMessage) {
+        console.log('this is private message');
+        fetch(`http://localhost:3000/api/direct-messages/send`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            text: input.value,
+            receiverId: receiverId
+          })
+        }).then(response => {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+              response.status);
+            return;
+          } else if (response.ok) {
+            socket.emit('chat message', input.value);
+            input.value = '';
+          }
+        });
+      }
     }
-    } 
   });
 
   socket.on('chat message', function (msg) {
@@ -200,6 +200,8 @@
           isChannelMessage = true;
 
           console.log(isChannelMessage);
+
+          messages.replaceChildren()
 
           json.data.messages.forEach(message => {
             const item = document.createElement('li');
@@ -237,6 +239,8 @@
           isChannelMessage = false;
           console.log(isChannelMessage);
 
+          messages.replaceChildren();
+
           json.data?.forEach(message => {
             const item = document.createElement('li');
             item.textContent = `${message.text}   -   ${message.sender.name} ${message.sender.lastName}`;
@@ -273,19 +277,19 @@
   }
 
   function signOutWorkspace() {
-        fetch('http://localhost:3000/api/workspaces/signout-workspace', { method: 'GET' }).then(response => {
-            if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                    response.status);
-                return;
-            }
-            window.location.assign('/app');
-            return;
-        }).catch(err => {
-            console.log('Fetch Error :-S', err);
-        });;
+    fetch('http://localhost:3000/api/workspaces/signout-workspace', { method: 'GET' }).then(response => {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+      window.location.assign('/app');
+      return;
+    }).catch(err => {
+      console.log('Fetch Error :-S', err);
+    });;
 
-    }
+  }
 
 </script>
 
