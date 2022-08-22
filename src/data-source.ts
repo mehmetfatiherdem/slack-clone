@@ -9,11 +9,26 @@ import { WorkSpace } from './entity/WorkSpace';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',
-  port: parseInt(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host:
+    process.env.NODE_ENV == 'production'
+      ? process.env.CLOUD_DB_HOST
+      : 'localhost',
+  port:
+    process.env.NODE_ENV == 'production'
+      ? parseInt(process.env.CLOUD_DB_PORT)
+      : parseInt(process.env.DB_PORT),
+  username:
+    process.env.NODE_ENV == 'production'
+      ? process.env.CLOUD_DB_USERNAME
+      : process.env.DB_USERNAME,
+  password:
+    process.env.NODE_ENV == 'production'
+      ? process.env.CLOUD_DB_PASSWORD
+      : process.env.DB_PASSWORD,
+  database:
+    process.env.NODE_ENV == 'production'
+      ? process.env.CLOUD_DB_NAME
+      : process.env.DB_NAME,
   synchronize: process.env.NODE_ENV == 'production' ? false : true,
   logging: false,
   entities: [User, Channel, DirectMessage, Message, WorkSpace, PrivateMessage],
