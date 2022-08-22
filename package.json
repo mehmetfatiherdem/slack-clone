@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/src/app.js",
     "build": "tsc && ts-node tools/copyAssets",
     "copy-assets": "ts-node tools/copyAssets",
     "dev": "nodemon --config nodemon.json src/app.ts",
