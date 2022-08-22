@@ -29,7 +29,7 @@ export const AppDataSource = new DataSource({
     process.env.NODE_ENV == 'production'
       ? process.env.CLOUD_DB_NAME
       : process.env.DB_NAME,
-  synchronize: process.env.NODE_ENV == 'production' ? false : true,
+  synchronize: true,
   logging: false,
   entities: [User, Channel, DirectMessage, Message, WorkSpace, PrivateMessage],
   migrations: [],
