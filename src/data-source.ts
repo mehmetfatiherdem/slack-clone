@@ -9,6 +9,7 @@ import { WorkSpace } from './entity/WorkSpace';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
+  url: process.env.NODE_ENV == 'production' ? process.env.DATABASE_URL : '',
   host:
     process.env.NODE_ENV == 'production'
       ? process.env.CLOUD_DB_HOST
