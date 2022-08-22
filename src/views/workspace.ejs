@@ -131,10 +131,7 @@
 
       if (isChannelMessage) {
 
-        const url = process.env.NODE_ENV == 'production'
-          ? `https://slack-like-app.herokuapp.com/api/messages/create` : `http://localhost:3000/api/messages/create`;
-
-        fetch(url, {
+        fetch(`https://slack-like-app.herokuapp.com/api/messages/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -158,10 +155,7 @@
 
       } else if (!isChannelMessage) {
 
-        const url = process.env.NODE_ENV == 'production'
-          ? `https://slack-like-app.herokuapp.com/api/direct-messages/send` : `http://localhost:3000/api/direct-messages/send`;
-
-        fetch(url, {
+        fetch(`https://slack-like-app.herokuapp.com/api/direct-messages/send`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -195,10 +189,8 @@
   });
 
   function getChannel(id) {
-    const url = process.env.NODE_ENV == 'production'
-      ? `https://slack-like-app.herokuapp.com/api/channels/${id}` : `http://localhost:3000/api/channels/${id}`;
 
-    fetch(url, { method: 'GET' }).then(response => {
+    fetch(`https://slack-like-app.herokuapp.com/api/channels/${id}`, { method: 'GET' }).then(response => {
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' +
           response.status);
@@ -231,10 +223,8 @@
 
 
   function getDirectMessage(id) {
-    const url = process.env.NODE_ENV == 'production'
-      ? `https://slack-like-app.herokuapp.com/api/direct-messages/${id}` : `http://localhost:3000/api/direct-messages/${id}`;
 
-    fetch(url, { method: 'GET' }).then(response => {
+    fetch(`https://slack-like-app.herokuapp.com/api/direct-messages/${id}`, { method: 'GET' }).then(response => {
 
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' +
@@ -267,10 +257,7 @@
   }
 
   function getSender() {
-    const url = process.env.NODE_ENV == 'production'
-      ? `https://slack-like-app.herokuapp.com/api/users/me` : `http://localhost:3000/api/users/me`;
-
-    fetch(url, {
+    fetch(`https://slack-like-app.herokuapp.com/api/users/me`, {
       method: 'GET'
     }).then(response => {
       if (response.status !== 200) {
@@ -288,10 +275,7 @@
   }
 
   function signOutWorkspace() {
-    const url = process.env.NODE_ENV == 'production'
-      ? `https://slack-like-app.herokuapp.com/api/workspaces/signout-workspace` : `http://localhost:3000/api/workspaces/signout-workspace`;
-
-    fetch(url, { method: 'GET' }).then(response => {
+    fetch(`https://slack-like-app.herokuapp.com/api/workspaces/signout-workspace`, { method: 'GET' }).then(response => {
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' +
           response.status);
