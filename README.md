@@ -6,7 +6,8 @@ A clone of Slack using server-side rendering.
 
 This is a Slack like application that is built using server-side rendering. I was thinking about making a clone of an application that I have been using everyday. The reason why I chosed Slack is because it was the application that I was using daily at that time and working on a websocket application also seemed appealing to me. I was also going to have a challenge of using template engine to render the frontend. It is built on top of the [TypeScript](https://www.typescriptlang.org/), the [Express.js](https://expressjs.com/) framework, the [PostgreSQL](https://www.postgresql.org/) database and [Socket.IO](https://socket.io/).
 
-
+#### Live Swagger Demo Link (Heroku)
+https://slack-like-app.herokuapp.com/
 
 ## Database Diagram
 
