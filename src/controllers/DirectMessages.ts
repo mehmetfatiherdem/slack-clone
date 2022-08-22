@@ -60,6 +60,8 @@ export const sendPrivateMessage = async (
     ],
   });
 
+  //FIXME: handle a user sending messages to themselves
+
   await AppDataSource.transaction(async (transactionalEntityManager) => {
     if (!sender.directMessage) {
       const directMessage = new DirectMessage();
@@ -67,10 +69,30 @@ export const sendPrivateMessage = async (
       directMessage.users = [];
       directMessage.users.push(receiver);
       sender.directMessage = directMessage;
+
+      if (!receiver.directMessageBelongTo) {
+        receiver.directMessageBelongTo = [];
+      }
+
+      receiver.directMessageBelongTo.push(directMessage);
+
       await transactionalEntityManager.save(directMessage);
     } else {
-      sender.directMessage.users.push(receiver);
-      await transactionalEntityManager.save(sender.directMessage);
+      if (
+        sender.directMessage.users.some((user) => {
+          user.id !== receiver.id;
+        })
+      ) {
+        sender.directMessage.users.push(receiver);
+
+        if (!receiver.directMessageBelongTo) {
+          receiver.directMessageBelongTo = [];
+        }
+
+        receiver.directMessageBelongTo.push(sender.directMessage);
+
+        await transactionalEntityManager.save(sender.directMessage);
+      }
     }
 
     if (!receiver.directMessage) {
@@ -79,10 +101,30 @@ export const sendPrivateMessage = async (
       directMessage.users = [];
       directMessage.users.push(sender);
       receiver.directMessage = directMessage;
+
+      if (!sender.directMessageBelongTo) {
+        sender.directMessageBelongTo = [];
+      }
+
+      sender.directMessageBelongTo.push(directMessage);
+
       await transactionalEntityManager.save(directMessage);
     } else {
-      receiver.directMessage.users.push(sender);
-      await transactionalEntityManager.save(receiver.directMessage);
+      if (
+        receiver.directMessage.users.some((user) => {
+          user.id !== sender.id;
+        })
+      ) {
+        receiver.directMessage.users.push(sender);
+
+        if (!sender.directMessageBelongTo) {
+          sender.directMessageBelongTo = [];
+        }
+
+        sender.directMessageBelongTo.push(receiver.directMessage);
+
+        await transactionalEntityManager.save(receiver.directMessage);
+      }
     }
 
     const privateMessage = new PrivateMessage();
@@ -93,19 +135,16 @@ export const sendPrivateMessage = async (
     privateMessage.directMessages.push(sender.directMessage);
     privateMessage.directMessages.push(receiver.directMessage);
 
-    if (sender.privateMessagesSent?.length > 0) {
-      sender.privateMessagesSent.push(privateMessage);
-    } else {
+    if (!sender.privateMessagesSent) {
       sender.privateMessagesSent = [];
-      sender.privateMessagesSent.push(privateMessage);
     }
 
-    if (receiver.privateMessagesReceived?.length > 0) {
-      receiver.privateMessagesReceived.push(privateMessage);
-    } else {
+    sender.privateMessagesSent.push(privateMessage);
+
+    if (!receiver.privateMessagesReceived) {
       receiver.privateMessagesReceived = [];
-      receiver.privateMessagesReceived.push(privateMessage);
     }
+    receiver.privateMessagesReceived.push(privateMessage);
 
     await transactionalEntityManager.save(privateMessage);
   });
