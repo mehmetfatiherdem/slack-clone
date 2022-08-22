@@ -9,8 +9,14 @@ import { WorkSpace } from './entity/WorkSpace';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  url: process.env.NODE_ENV == 'production' ? process.env.DATABASE_URL : process.env.DB_URL,
+  url:
+    process.env.NODE_ENV == 'production'
+      ? process.env.DATABASE_URL
+      : process.env.DB_URL,
   synchronize: true,
+  extra: {
+    ssl: true,
+  },
   logging: false,
   entities: [User, Channel, DirectMessage, Message, WorkSpace, PrivateMessage],
   migrations: [],
