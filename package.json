@@ -2,7 +2,7 @@
   "name": "slack-clone",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "dist/src/app.js",
   "scripts": {
     "start": "node dist/src/app.js",
     "build": "tsc && ts-node tools/copyAssets",
