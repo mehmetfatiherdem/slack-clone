@@ -14,7 +14,7 @@ export const getDirectMessage = async (
   const userRepo = AppDataSource.getRepository(User);
   const privateMessageRepo = AppDataSource.getRepository(PrivateMessage);
 
-  const sender = await userRepo.findOne({
+  const authUser = await userRepo.findOne({
     where: { id: req.user.id },
   });
 
@@ -23,11 +23,20 @@ export const getDirectMessage = async (
     relations: ['sender', 'receiver'],
   });
 
+  //FIXME: handle this better and sort messages by creation
+  const sent = privateMessages.filter(
+    (msg) => msg.sender.id === authUser.id && msg.receiver.id === userId
+  );
+
+  const received = privateMessages.filter(
+    (msg) => msg.receiver.id === authUser.id && msg.sender.id === userId
+  );
+
+  const messages = [...sent, ...received];
+
   res.json({
     message: 'direct messages retrieved successfully',
-    data: privateMessages.filter(
-      (msg) => msg.sender.id === sender.id && msg.receiver.id === userId
-    ),
+    data: messages,
   });
 };
 
