@@ -31,20 +31,9 @@ export const createWorkSpace = async (
   authUser.workSpaces = [];
   authUser.workSpaces.push(workSpace);
 
-  const directMessage = new DirectMessage();
-
-  directMessage.owner = authUser;
-
-  await directMessageRepo.save(directMessage);
-
-  authUser.directMessage = directMessage;
-
   await workSpaceRepo.save(workSpace);
 
-  res.json({
-    message: 'Workspace created',
-    data: workSpace.serializedBasicInfo,
-  });
+  res.redirect('/app');
 };
 
 export const getWorkSpaces = (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -122,7 +111,7 @@ export const createChannel = async (
 
   await channelRepo.save(channel);
 
-  res.json(channel.name);
+  res.redirect(`/api/workspaces/${workspace.id}`);
 };
 
 export const joinWorkspace = async (
@@ -158,7 +147,7 @@ export const joinWorkspace = async (
 
   await workspaceRepo.save(workspace);
 
-  return res.send('joined');
+  res.redirect('/app')
 };
 
 export const signoutWorkspace = (

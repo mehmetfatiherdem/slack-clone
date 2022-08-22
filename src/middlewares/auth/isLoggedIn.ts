@@ -10,7 +10,7 @@ export const isLoggedIn = (
   const { app_token } = req.signedCookies;
 
   if (!app_token) {
-    return res.status(401).json({ message: 'The user is not authenticated' });
+    return res.redirect('/');
   }
   try {
     const user = jwt.verify(app_token, process.env.JWT_SECRET);
