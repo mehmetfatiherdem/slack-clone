@@ -79,7 +79,7 @@ export const sendPrivateMessage = async (
       await transactionalEntityManager.save(directMessage);
     } else {
       if (
-        sender.directMessage.users.some((user) => {
+        sender.directMessage.users.every((user) => {
           user.id !== receiver.id;
         })
       ) {
@@ -89,8 +89,13 @@ export const sendPrivateMessage = async (
           receiver.directMessageBelongTo = [];
         }
 
-        receiver.directMessageBelongTo.push(sender.directMessage);
-
+        if (
+          receiver.directMessageBelongTo.every((dm) => {
+            dm.id !== sender.directMessage.id;
+          })
+        ) {
+          receiver.directMessageBelongTo.push(sender.directMessage);
+        }
         await transactionalEntityManager.save(sender.directMessage);
       }
     }
@@ -111,7 +116,7 @@ export const sendPrivateMessage = async (
       await transactionalEntityManager.save(directMessage);
     } else {
       if (
-        receiver.directMessage.users.some((user) => {
+        receiver.directMessage.users.every((user) => {
           user.id !== sender.id;
         })
       ) {
@@ -121,7 +126,13 @@ export const sendPrivateMessage = async (
           sender.directMessageBelongTo = [];
         }
 
-        sender.directMessageBelongTo.push(receiver.directMessage);
+        if (
+          sender.directMessageBelongTo.every((dm) => {
+            dm.id !== receiver.directMessage.id;
+          })
+        ) {
+          sender.directMessageBelongTo.push(receiver.directMessage);
+        }
 
         await transactionalEntityManager.save(receiver.directMessage);
       }
