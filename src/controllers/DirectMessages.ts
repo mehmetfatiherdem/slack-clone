@@ -62,6 +62,12 @@ export const sendPrivateMessage = async (
 
   //FIXME: handle a user sending messages to themselves
 
+  if (sender.id === receiver.id) {
+    return res
+      .status(422)
+      .json({ message: 'you cannot send a message to yourself yet :_(' });
+  }
+
   await AppDataSource.transaction(async (transactionalEntityManager) => {
     if (!sender.directMessage) {
       const directMessage = new DirectMessage();

@@ -68,7 +68,7 @@
 
   <% if(workSpace.users?.length> 0){ %>
     <% workSpace.users.forEach(user=>{ %>
-
+      
       <button onclick="getDirectMessage('<%= user.id %>')">
         <%= user.name %>
       </button>
