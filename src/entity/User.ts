@@ -97,11 +97,6 @@ export class User {
   @JoinTable()
   workSpaces: WorkSpace[];
 
-  @ManyToMany(() => WorkSpace, (workSpace) => workSpace.signedInUsers, {
-    nullable: true,
-  })
-  signedInWorkSpaces: WorkSpace[];
-
   @OneToOne(() => DirectMessage, (directMessage) => directMessage.owner, {
     nullable: true,
     cascade: true,

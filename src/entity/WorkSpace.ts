@@ -32,14 +32,6 @@ export class WorkSpace {
   @ManyToMany(() => User, (user) => user.workSpaces, { nullable: true })
   users: User[];
 
-  // TODO: do we really need this?
-  @ManyToMany(() => User, (user) => user.signedInWorkSpaces, {
-    nullable: true,
-    cascade: true,
-  })
-  @JoinTable()
-  signedInUsers: User[];
-
   @CreateDateColumn()
   createdAt: Date;
 
