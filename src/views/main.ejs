@@ -75,7 +75,7 @@
                     <button id="sign-out-app" onclick="signOut()">Sign Out From App</button>
         </div>
         <div class="create-workspace">
-            <form action="http://localhost:3000/api/workspaces/create" method="post">
+            <form action="/api/workspaces/create" method="post">
                 <h3>Create Workspace</h3>
                 <label for="username">Name</label>
                 <input type="text" name="name" id="workspace-name">
@@ -91,7 +91,7 @@
                         <%= workSpace.name %>
 
                     </h3>
-      
+
                     <button onclick="getWorkSpace('<%= workSpace.id %>')">Launch</button>
                     <% }) %>
                         <% } else { %>
@@ -107,7 +107,7 @@
 </body>
 <script>
     function signOut() {
-        fetch('http://localhost:3000/api/auth/signout-app', { method: 'GET' }).then(response => {
+        fetch('/api/auth/signout-app', { method: 'GET' }).then(response => {
             if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' +
                     response.status);
@@ -122,13 +122,16 @@
     }
 
     function getWorkSpace(id) {
-        fetch(`http://localhost:3000/api/workspaces/${id}`, { method: 'GET' }).then(response => {
+        const url = process.env.NODE_ENV == 'production'
+            ? `https://slack-like-app.herokuapp.com/api/workspaces/${id}` : `http://localhost:3000/api/workspaces/${id}`;
+
+        fetch(url, { method: 'GET' }).then(response => {
             if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' +
                     response.status);
                 return;
             }
-            
+
             window.location.assign(`/api/workspaces/${id}`);
             return;
         }).catch(err => {

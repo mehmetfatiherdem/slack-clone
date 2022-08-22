@@ -78,7 +78,10 @@ export const getWorkSpace = async (
 
   res.render('workspace.ejs', {
     workSpace,
-    inviteLink: `http://localhost:3000/api/workspaces/${workSpace.id}/join/${workSpace.inviteCode}`,
+    inviteLink:
+      process.env.NODE_ENV == 'production'
+        ? `https://slack-like-app.herokuapp.com/api/workspaces/${workSpace.id}/join/${workSpace.inviteCode}`
+        : `http://localhost:3000/api/workspaces/${workSpace.id}/join/${workSpace.inviteCode}`,
   });
 };
 
@@ -147,7 +150,7 @@ export const joinWorkspace = async (
 
   await workspaceRepo.save(workspace);
 
-  res.redirect('/app')
+  res.redirect('/app');
 };
 
 export const signoutWorkspace = (
