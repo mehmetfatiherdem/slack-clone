@@ -15,7 +15,9 @@ export const AppDataSource = new DataSource({
       : process.env.DB_URL,
   synchronize: true,
   extra: {
-    ssl: true,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
   logging: false,
   entities: [User, Channel, DirectMessage, Message, WorkSpace, PrivateMessage],
