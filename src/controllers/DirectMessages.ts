@@ -18,21 +18,29 @@ export const getDirectMessage = async (
     where: { id: req.user.id },
   });
 
-  // FIXME: where: {sender, receiver} doesn't work??
-  const privateMessages = await privateMessageRepo.find({
-    relations: ['sender', 'receiver'],
+  const receiver = await userRepo.findOne({
+    where: { id: userId },
   });
 
-  //FIXME: handle this better and sort messages by creation
-  const sent = privateMessages.filter(
-    (msg) => msg.sender.id === authUser.id && msg.receiver.id === userId
-  );
+  const messages = await privateMessageRepo
+    .createQueryBuilder('privateMessage')
+    .where(
+      'privateMessage.sender = :sender AND privateMessage.receiver = :receiver',
+      { sender: authUser.id, receiver: receiver.id }
+    )
+    .orWhere('privateMessage.sender = :s AND privateMessage.receiver = :r', {
+      s: receiver.id,
+      r: authUser.id,
+    })
+    .leftJoinAndSelect('privateMessage.sender', 'sender')
+    .orderBy('privateMessage.createdAt', 'ASC')
+    .getMany();
 
-  const received = privateMessages.filter(
-    (msg) => msg.receiver.id === authUser.id && msg.sender.id === userId
-  );
-
-  const messages = [...sent, ...received];
+  if (!messages) {
+    return res
+      .status(422)
+      .json({ message: 'could not fetch the private messages' });
+  }
 
   res.json({
     message: 'direct messages retrieved successfully',
